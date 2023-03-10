@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { Appbar, Chip, Button, useTheme } from "react-native-paper";
 import { NewsData } from "../utils/Types";
 import CardItem from "../components/CardItem";
+import { Item } from "react-native-paper/lib/typescript/src/components/Drawer/Drawer";
 
 const categories = ["Technology", "Sports", "Politics", "Health", "Business"];
 const API_KEY = "pub_18477212e751dc38cb21c5c2176e532c458f3";
@@ -34,9 +35,8 @@ const Home = () => {
     }
   };
   // console.log(newsData.length > 0 ? Object.keys(newsData[0]) : []);
-  console.log(newsData);
 
- return (
+  return (
     <View style={styles.container}>
       <Appbar.Header>
         <Appbar.Content title="Home"></Appbar.Content>
@@ -71,6 +71,13 @@ const Home = () => {
           Refresh
         </Button>
       </View>
+      <FlatList
+        data={newsData}
+        renderItem={(item) => (
+          <CardItem category={item.category} content={item.content} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </View>
   );
 };
@@ -80,6 +87,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#E9E8E8",
   },
   filterContainer: {
     flexDirection: "row",

@@ -1,15 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { NewsData } from '../utils/Types'
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { NewsData } from "../utils/Types";
 
-const CardItem = (props:NewsData) => {
+const CardItem = (props: NewsData) => {
+  console.log({props})
   return (
-    <View>
-      <Text>CardItem</Text>
+    <View style={styles.conatiner}>
+      <Text>{props.category}</Text>
+      {/* <Text>{props.description}</Text> */}
     </View>
-  )
-}
+  );
+};
 
-export default CardItem
+export default CardItem;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  conatiner: {
+    paddingHorizontal: 5,
+    paddingVertical:10,
+    backgroundColor:"red"
+  },
+});
