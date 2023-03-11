@@ -1,11 +1,10 @@
 // @ts-nocheck
 
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { Appbar, Chip, Button, useTheme } from "react-native-paper";
 import { NewsData } from "../utils/Types";
 import CardItem from "../components/CardItem";
-import { Item } from "react-native-paper/lib/typescript/src/components/Drawer/Drawer";
 
 const categories = ["Technology", "Sports", "Politics", "Health", "Business"];
 const API_KEY = "pub_18477212e751dc38cb21c5c2176e532c458f3";
@@ -25,7 +24,7 @@ const Home = () => {
     const URL = `https://newsdata.io/api/1/news?apikey=${API_KEY}&country=ca,fr,de,ma,kp&language=en${
       selectedCategories.length > 0 && `&category=${selectedCategories.join()}`
     }`;
-    console.log(URL);
+    // console.log(URL);
     try {
       await fetch(URL)
         .then((res) => res.json())
@@ -34,7 +33,6 @@ const Home = () => {
       console.log(error);
     }
   };
-  // console.log(newsData.length > 0 ? Object.keys(newsData[0]) : []);
 
   return (
     <View style={styles.container}>
@@ -64,7 +62,7 @@ const Home = () => {
         <Button
           mode="contained-tonal"
           style={styles.button}
-          labelStyle={{ fontSize: 14, color: theme.colors.primary }}
+          labelStyle={{ fontSize: 14, color: theme.colors.surface }}
           icon={"sync"}
           onPress={handleRefresh}
         >
@@ -72,9 +70,24 @@ const Home = () => {
         </Button>
       </View>
       <FlatList
+      style={styles.flatList}
         data={newsData}
-        renderItem={(item) => (
-          <CardItem category={item.category} content={item.content} />
+        renderItem={({ item }) => (
+          <CardItem
+            title={item.title}
+            link={item.link}
+            keywords={item.keywords}
+            creator={item.creator}
+            video_url={item.video_url}
+            description={item.description}
+            content={item.content}
+            pubDate={item.pubDate}
+            image_url={item.image_url}
+            source_id={item.source_id}
+            category={item.category}
+            country={item.country}
+            language={item.language}
+          />
         )}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -87,7 +100,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E9E8E8",
+    // backgroundColor: "#000"
   },
   filterContainer: {
     flexDirection: "row",
@@ -97,11 +110,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   chipItem: {
-    marginVertical: 5,
+    marginVertical: 6,
+    backgroundColor:'#E384FF',
+    borderColor:"#FFA3FD"
   },
   button: {
     maxWidth: 400,
     padding: 0,
     maxHeight: 40,
+    marginVertical:4,
+    backgroundColor:"#FFCEFE",
   },
+  flatList:{
+    flex:1,
+    height:"auto"
+  }
 });
