@@ -1,28 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Button, Card } from "react-native-paper";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Card } from "react-native-paper";
 import { NewsData } from "../utils/Types";
 
 const CardItem = (props: NewsData) => {
   return (
-    <View style={styles.conatiner}>
-      <Card>
+    <Pressable style={styles.conatiner}>
+      <Card style={styles.card}>
+        <Card.Cover
+          source={{ uri: props.image_url }}
+          style={{ shadowColor: "#FFFFFF" }}
+        />
         <Card.Title
           title={props.title}
-          subtitle="Card Subtitle"
-          
-        />
+          subtitle={props.description}
+        ></Card.Title>
         <Card.Content>
-          <Text>Card title</Text>
-          <Text>Card content</Text>
+          {/* <Text style={{color:"white"}}> {props.content} </Text> */}
         </Card.Content>
-        <Card.Cover source={{ uri: props.image_url }} />
-        <Card.Actions>
-          <Button>Cancel</Button>
-          <Button>Ok</Button>
-        </Card.Actions>
       </Card>
-    </View>
+    </Pressable>
   );
 };
 
@@ -32,5 +29,8 @@ const styles = StyleSheet.create({
   conatiner: {
     paddingHorizontal: 5,
     paddingVertical: 10,
+  },
+  card: {
+    marginVertical: 10,
   },
 });
