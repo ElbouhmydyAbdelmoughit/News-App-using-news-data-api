@@ -13,6 +13,7 @@ const Home = () => {
   const [newsData, setNewsData] = useState<NewsData[]>([]);
   const theme = useTheme();
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [nextPage, setNextPage] = useState("");
   const handleSelect = (val: string) => {
     setSelectedCategories((prev: string[]) =>
       prev.find((p) => p === val)
@@ -22,18 +23,23 @@ const Home = () => {
   };
   const handleRefresh = async () => {
     const URL = `https://newsdata.io/api/1/news?apikey=${API_KEY}&country=ca,fr,de,ma,kp&language=en${
-      selectedCategories.length > 0 && `&category=${selectedCategories.join()}`
-    }`;
-    // console.log(URL);
+      selectedCategories.length > 0
+        ? `&category=${selectedCategories.join()}`
+        : ""
+    }${nextPage?.length > 0 ? `&page=${nextPage}` : ""}`;
+
     try {
       await fetch(URL)
         .then((res) => res.json())
-        .then((data) => setNewsData(data.results));
-    } catch (error) {
-      console.log(error);
+        .then((data) => {
+          setNewsData((prev) => [...prev, ...data.results]);
+          setNextPage(data.nextPage);
+        });
+    } catch (err) {
+      console.log(err);
     }
   };
-
+  console.log(nextPage);
   return (
     <View style={styles.container}>
       <Appbar.Header>
@@ -70,7 +76,8 @@ const Home = () => {
         </Button>
       </View>
       <FlatList
-      style={styles.flatList}
+        onEndReached={() => handleRefresh()}
+        style={styles.flatList}
         data={newsData}
         renderItem={({ item }) => (
           <CardItem
@@ -111,18 +118,18 @@ const styles = StyleSheet.create({
   },
   chipItem: {
     marginVertical: 6,
-    backgroundColor:'#E384FF',
-    borderColor:"#FFA3FD"
+    backgroundColor: "#E384FF",
+    borderColor: "#FFA3FD",
   },
   button: {
     maxWidth: 400,
     padding: 0,
     maxHeight: 40,
-    marginVertical:4,
-    backgroundColor:"#FFCEFE",
+    marginVertical: 4,
+    backgroundColor: "#FFCEFE",
   },
-  flatList:{
-    flex:1,
-    height:"auto"
-  }
+  flatList: {
+    flex: 1,
+    height: "auto",
+  },
 });
